@@ -1,8 +1,10 @@
 
+
+
 :root {
     --notification-background: #313e2c;
     --notification-primary: #aaec8a;
-    --background: #FAF9FF;
+    --background: #0d110e;
 }
 
 * {
@@ -13,8 +15,7 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    height: 100vh;
-    background-color: var(--background);
+    background: var(--background);
 }
 
 .notification {
@@ -22,14 +23,15 @@ body {
     width: max-content;
     left: 0; 
     right: 0; 
-    bottom: 1.5rem;
+    bottom: 2rem;
     margin-left: auto; 
     margin-right: auto; 
     border-radius: 0.375rem;
-    background-color: var(
+    background: var(
         --notification-background);
     color: var(--notification-primary);
-    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 10px 
+        rgba(0, 0, 0, 0.1);
     transform: translateY(1.875rem);
     opacity: 0;
     visibility: hidden;
@@ -83,3 +85,4 @@ body {
         transform: scaleX(1);
     }
 }
+

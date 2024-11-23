@@ -86,7 +86,7 @@ body {
 .main-item--open + ul {
   visibility: visible;
   max-height: 25rem;
-  padding-left: 1.4re;
+  padding-left: 1.4rem;
   opacity: 1;
   display: flex;
   align-items: center;

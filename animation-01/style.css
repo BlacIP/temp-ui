@@ -1,3 +1,5 @@
+
+
 * {
     margin: 0;
     padding: 0;
@@ -55,7 +57,8 @@ body {
     height: 0.4rem;
     border-radius: 0.5rem;
     background: orange;
-    animation: audio-wave 2.2s infinite ease-in-out;
+    animation: audio-wave 2.2s 
+        infinite ease-in-out;
 }
 
 .sound-wave div:nth-child(2) {
@@ -76,9 +79,4 @@ body {
 .sound-wave div:nth-child(5) {
     left: 44px;
     animation-delay: 0.8s;
-}
-
-.sound-wave div:nth-child(5) {
-    left: 55px;
-    animation-delay: 1s;
 }

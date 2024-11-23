@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+
 
 :root {
     --primary: #3ECF8E;
@@ -20,7 +21,7 @@
 body {
     font-family: 'Open Sans', sans-serif;
     font-size: 16px;
-    background-color: var(--background);
+    background: var(--background);
 }
 
 * {
@@ -31,7 +32,8 @@ body {
 
 .header {
     width: 100vw;
-    border-bottom: 1px solid var(--gray-border);
+    border-bottom: 1px solid var(
+        --gray-border);
     height: var(--navbar-height);
     display: flex;
     align-items: center;
@@ -72,7 +74,7 @@ body {
     list-style-type: none;
     align-items: center;
     gap: 1rem;
-    background-color: var(--background);
+    background: var(--background);
 }
 
 .navigation>li {
@@ -141,7 +143,8 @@ body {
 @keyframes fadeIn {
     from {
         opacity: 0;
-        transform: scale(0.99) translateY(-0.7em);
+        transform: scale(0.99) 
+        translateY(-0.7em);
         transform-origin: top;
     }
 
@@ -186,7 +189,8 @@ body {
 }
 
 .list-items-with-description li:hover {
-    background-color: var(--secondary-background);
+    background: var(
+        --secondary-background);
     border-radius: 0.3rem;
 }
 
@@ -195,11 +199,13 @@ body {
 }
 
 
-.list-items-with-description li:hover svg {
+.list-items-with-description li:hover
+svg {
     color: var(--text);
 }
 
-.list-items-with-description li .icon-wrapper {
+.list-items-with-description li 
+.icon-wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -210,7 +216,9 @@ body {
     min-width: 2.5rem;
     min-height: 2.5rem;
     pointer-events: all;
-    background-color: var(--gray-menu-button-hover);
+    background: var(
+        --gray-menu-button-hover
+    );
 }
 
 
@@ -224,7 +232,8 @@ body {
     color: var(--text);
 }
 
-.list-items-with-description li:hover .item-title p {
+.list-items-with-description li:hover 
+.item-title p {
     color: var(--gray-text-hover);
 }
 
@@ -255,33 +264,34 @@ body {
     background: none;
     color: var(--text);
     outline: none;
-    border: 1px solid var(--gray-border);
+    border: 1px solid var(
+        --gray-border);
     border-radius: 0.5rem;
 }
 
 .secondary:hover {
-    border: 1px solid var(--gray-border-hover);
+    border: 1px solid var(
+        --gray-border-hover);
 }
 
 .primary {
     color: var(--text);
     border-radius: 0.5rem;
-    background-color: var(--primary-dark);
+    background: var(--primary-dark);
     border: 1px solid var(--primary);
     padding: 0.5rem 1rem;
 }
 
 .primary:hover {
-    background-color: var(--primary-darker);
+    background: var(--primary-darker);
 }
-
 
 .burger-menu {
     display: none;
     outline: none;
     border: none;
     cursor: pointer;
-    background-color: transparent;
+    background: transparent;
 }
 
 
@@ -304,7 +314,8 @@ body {
     }
 
     .burger-menu:hover {
-        background-color: var(--gray-menu-button-hover);
+        background: var(
+            --gray-menu-button-hover);
     }
 
     .burger-menu:focus {

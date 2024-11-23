@@ -1,3 +1,5 @@
+
+
 :root {
     --primary: #5F5DFE;
     --primary-darker: #4F4DFE;
@@ -95,7 +97,8 @@ body {
     justify-content: center;
     gap: 0.25rem;
     background: var(--highlight-bg);
-    border: 1px solid var(--border-color);
+    border: 1px solid var(
+        --border-color);
 }
 
 .profile__header {
@@ -174,7 +177,8 @@ body {
 }
 
 .social-links a:hover {
-    border: 1px solid var(--active);
+    border: 1px solid var(
+        --active);
 }
 
 .social-links a:hover svg {
@@ -200,7 +204,8 @@ body {
 }
 
 .btn--primary:hover {
-    background: var(--primary-darker);
+    background: var(
+        --primary-darker);
 }
 
 .profile main {
@@ -287,15 +292,22 @@ body {
 }
 
 .tabs li:nth-child(1):has(.active)~#active-bg {
-    transform: translateX(calc(0));
+    transform: translateX(
+        calc(0)
+        );
 }
 
 .tabs li:nth-child(2):has(.active)~#active-bg {
-    transform: translateX(calc(var(--tab-width) + var(--tabs-gap)));
+    transform: translateX(
+        calc(var(--tab-width) + 
+        var(--tabs-gap)));
 }
 
-.tabs li:nth-child(3):has(.active)~#active-bg {
-    transform: translateX(calc(var(--tab-width)*2 + var(--tabs-gap)*2));
+.tabs li:nth-child(3):has(.active)
+~#active-bg {
+    transform: translateX(
+        calc(var(--tab-width)*2 + 
+        var(--tabs-gap)*2));
 }
 
 .content-links {
@@ -339,8 +351,10 @@ body {
     align-items: start;
     padding: 0.5rem;
     border-radius: 0.5rem;
-    background: var(--highlight-bg);
-    border: 1px solid var(--border-color);
+    background: var(
+        --highlight-bg);
+    border: 1px solid var(
+        --border-color);
 }
 
 .review img {

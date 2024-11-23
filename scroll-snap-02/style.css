@@ -50,19 +50,27 @@ body {
 }
 
 .card:nth-child(1) {
-    background-image: linear-gradient(to bottom, #9377F2, #6250D7);
+    background-image: linear-gradient(
+        to bottom, #9377F2, #6250D7
+    );
 }
 
 .card:nth-child(2) {
-    background-image: linear-gradient(to bottom, #E5866C, #DF795D);
+    background-image: linear-gradient(
+        to bottom, #E5866C, #DF795D
+    );
 }
 
 .card:nth-child(3) {
-    background-image: linear-gradient(to bottom, #5866E4, #4D5AD9);
+    background-image: linear-gradient(
+        to bottom, #5866E4, #4D5AD9
+    );
 }
 
 .card:nth-child(4) {
-    background-image: linear-gradient(to bottom, #97BF42, #75AA29);
+    background-image: linear-gradient(
+        to bottom, #97BF42, #75AA29
+    );
 }
 
 .container::-webkit-scrollbar {
@@ -78,3 +86,4 @@ body {
     background: var(--text);
     border-radius: 50rem;
 }
+

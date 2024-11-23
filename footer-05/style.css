@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
 
 :root {
     --primary: #3ECF8E;
@@ -29,7 +29,8 @@
 }
 
 body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Open Sans', 
+      sans-serif;
     font-size: 16px;
     background: var(--bg);
     height: 100%;
@@ -45,7 +46,7 @@ main {
 footer {
     position: absolute;
     bottom: 0;
-    background-color: var(--footer-bg);
+    background: var(--footer-bg);
     width: 100%;
     padding-top: 1rem;
     display: flex;
@@ -108,11 +109,13 @@ footer {
     width: 2.5rem;
     height: 2.5rem;
     stroke: var(--text-color);
-    transition: all 0.2s ease-in-out;
+    transition: all 0.2s 
+        ease-in-out;
 }
 
 .social-links svg:hover {
-    stroke: var(--headline-color);
+    stroke: var(
+        --headline-color);
 }
 
 .social-links ul {
@@ -123,12 +126,10 @@ footer {
 }
 
 /* columns with links */
-
 .link-columns {
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;
-
     flex-grow: 1;
 }
 
@@ -156,7 +157,8 @@ footer {
 .link-columns ul a {
     color: var(--text-color);
     text-decoration: none;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.2s 
+    ease-in-out;
 }
 
 .link-columns ul a:hover {
@@ -181,7 +183,8 @@ footer {
     margin: 0 auto;
     width: 100%;
     padding: 2.5rem 1rem;
-    border-top: 1px solid var(--footer-border);
+    border-top: 1px solid 
+        var(--footer-border);
 }
 
 .footer-bottom small {
