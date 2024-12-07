@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative SMEs Solutions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        img {
+            max-width: 100%;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        ul {
+            text-align: left;
+            padding: 0;
+            list-style: none;
+        }
+        li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 id="main-title">Creative SMEs Solutions</h1>
+    <div id="step-container"></div>
+    <div id="button-container">
+        <button id="next-button">Next Step</button>
+        <button id="restart-button" style="display: none;">Restart</button>
+    </div>
+</div>
+
+<script>
+    const randomProducts = [
+        { name: "Abstract Art Print", description: "A vibrant and dynamic abstract art piece for modern homes.", image: "https://via.placeholder.com/300x200?text=Abstract+Art" },
+        { name: "Handmade Ceramic Mug", description: "A unique, handmade mug perfect for cozy mornings.", image: "https://via.placeholder.com/300x200?text=Ceramic+Mug" },
+        { name: "Digital Portrait", description: "A custom digital portrait for your social media or gifts.", image: "https://via.placeholder.com/300x200?text=Digital+Portrait" },
+        { name: "DIY Craft Kit", description: "A fun DIY kit for creating your own home decor pieces.", image: "https://via.placeholder.com/300x200?text=DIY+Craft+Kit" }
+    ];
+
+    let currentProduct = null;
+
+    const steps = [
+        {
+            title: "AI-Powered Product Generation",
+            content: `
+          <p>Click the button below to generate a random creative product.</p>
+          <button id="generate-product">Generate Product</button>
+          <div id="product-output" style="margin-top: 10px;"></div>
+        `,
+            onInit: () => {
+                document.getElementById('generate-product').addEventListener('click', () => {
+                    const randomIndex = Math.floor(Math.random() * randomProducts.length);
+                    currentProduct = randomProducts[randomIndex];
+                    const productOutput = document.getElementById('product-output');
+                    productOutput.innerHTML = `
+              <p><strong>Product Name:</strong> ${currentProduct.name}</p>
+              <p><strong>Description:</strong> ${currentProduct.description}</p>
+              <img src="${currentProduct.image}" alt="${currentProduct.name}" />
+            `;
+                });
+            }
+        },
+        {
+            title: "Product Details and Payment Link",
+            content: `
+          <p>Here are the details of the product generated along with a payment link option.</p>
+          <div id="product-details">
+            ${currentProduct
+                ? `<p><strong>Product Name:</strong> ${currentProduct.name}</p>
+                 <p><strong>Description:</strong> ${currentProduct.description}</p>
+                 <img src="${currentProduct.image}" alt="${currentProduct.name}" />`
+                : "<p>No product generated yet!</p>"}
+          </div>
+          <label for="product-type">Select Product Type:</label>
+          <select id="product-type">
+            <option value="digital">Digital</option>
+            <option value="physical">Physical</option>
+          </select>
+          <button id="generate-link">Generate Payment Link</button>
+          <div id="link-output" style="margin-top: 10px;"></div>
+        `,
+            onInit: () => {
+                document.getElementById('generate-link').addEventListener('click', () => {
+                    const productType = document.getElementById('product-type').value;
+                    const link = `https://pay.creatives.com/${productType}/${Math.random().toString(36).substr(2, 9)}`;
+                    const linkOutput = document.getElementById('link-output');
+                    linkOutput.innerHTML = `
+              <p><strong>Payment Link:</strong> <a href="${link}" target="_blank">${link}</a></p>
+              <p>Start selling ${productType} products with this link.</p>
+            `;
+                });
+            }
+        },
+        {
+            title: "Generate Promotional Content",
+            content: `
+          <p>Describe your target audience or promotional theme, and let AI generate content ideas.</p>
+          <textarea id="promo-description" placeholder="Describe your audience or theme..."></textarea>
+          <button id="generate-promo">Generate Promotional Content</button>
+          <ul id="promo-output"></ul>
+        `,
+            onInit: () => {
+                document.getElementById('generate-promo').addEventListener('click', () => {
+                    const description = document.getElementById('promo-description').value.trim();
+                    const promoOutput = document.getElementById('promo-output');
+                    promoOutput.innerHTML = "";
+
+                    if (description) {
+                        const suggestions = [
+                            `Visual theme: A modern design inspired by ${description}.`,
+                            `Content idea: Create a blog post about ${description}.`,
+                            `Campaign strategy: Use ${description} as a central theme for your social media ads.`,
+                            `Engagement idea: Host a contest where participants submit ideas related to ${description}.`
+                        ];
+                        suggestions.forEach(suggestion => {
+                            const li = document.createElement('li');
+                            li.textContent = suggestion;
+                            promoOutput.appendChild(li);
+                        });
+                    } else {
+                        alert("Please provide a description to generate promotional content!");
+                    }
+                });
+            }
+        }
+    ];
+
+    let currentStep = 0;
+
+    const stepContainer = document.getElementById('step-container');
+    const nextButton = document.getElementById('next-button');
+    const restartButton = document.getElementById('restart-button');
+
+    const renderStep = () => {
+        stepContainer.innerHTML = `
+        <h2>${steps[currentStep].title}</h2>
+        ${steps[currentStep].content}
+      `;
+        steps[currentStep].onInit();
+
+        // Toggle Restart Button visibility
+        restartButton.style.display = currentStep > 0 ? 'inline-block' : 'none';
+
+        // Toggle Next Button text and state
+        if (currentStep === steps.length - 1) {
+            nextButton.disabled = true;
+            nextButton.textContent = "All Steps Completed!";
+        } else {
+            nextButton.disabled = false;
+            nextButton.textContent = "Next Step";
+        }
+    };
+
+    const restartPrototype = () => {
+        currentStep = 0;
+        renderStep();
+    };
+
+    nextButton.addEventListener('click', () => {
+        if (currentStep < steps.length - 1) {
+            currentStep++;
+            renderStep();
+        }
+    });
+
+    restartButton.addEventListener('click', restartPrototype);
+
+    renderStep();
+</script>
+</body>
+</html>

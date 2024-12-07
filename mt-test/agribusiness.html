@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agribusiness SME Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .step {
+            display: none;
+        }
+        .step.active {
+            display: block;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #218838;
+        }
+        .share-buttons button {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 id="main-title">Agribusiness SME Management</h1>
+    <div id="step-container"></div>
+    <div id="button-container">
+        <button id="next-button">Next Step</button>
+        <button id="restart-button" style="display: none;">Restart</button>
+    </div>
+</div>
+
+<script>
+    const steps = [
+        {
+            title: "AI-Powered Payment Links",
+            content: `
+          <p>The system uses AI to dynamically generate shareable payment links based on the conversation you had with your customers.</p>
+          <button id="generate-link">Generate Payment Link</button>
+          <div id="link-output" style="margin-top: 10px;"></div>
+        `,
+            onInit: () => {
+                document.getElementById('generate-link').addEventListener('click', () => {
+                    const link = `https://pay.agribiz.com/${Math.random().toString(36).substr(2, 9)}`;
+                    const linkOutput = document.getElementById('link-output');
+                    linkOutput.innerHTML = `
+              <p>Generated Link: <a href="${link}" target="_blank">${link}</a></p>
+              <div class="share-buttons">
+                <button onclick="shareLink('${link}', 'whatsapp')">Share on WhatsApp</button>
+                <button onclick="shareLink('${link}', 'sms')">Share via SMS</button>
+                <button onclick="shareLink('${link}', 'facebook')">Share on Facebook</button>
+                <button onclick="shareLink('${link}', 'twitter')">Share on Twitter</button>
+              </div>
+            `;
+                });
+            }
+        },
+        {
+            title: "AI-Powered Inventory Integration",
+            content: `
+          <p>When a customer completes a payment, the system automatically updates the inventory in real-time.</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Current Stock</th>
+                <th>Low Stock</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Tomatoes</td>
+                <td>500 kg</td>
+                <td>200 kg</td>
+              </tr>
+              <tr>
+                <td>Potatoes</td>
+                <td>350 kg</td>
+                <td>150 kg</td>
+              </tr>
+              <tr>
+                <td>Carrots</td>
+                <td>250 kg</td>
+                <td>100 kg</td>
+              </tr>
+            </tbody>
+          </table>
+        `,
+            onInit: () => {}
+        },
+        {
+            title: "AI-Driven Demand Forecasting",
+            content: `
+          <p>The system uses AI to analyze past sales, inventory, and seasonal trends to predict upcoming demand.</p>
+          <canvas id="demand-chart" width="400" height="300"></canvas>
+        `,
+            onInit: () => {
+                const ctx = document.getElementById('demand-chart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+                        datasets: [
+                            {
+                                label: 'Predicted Demand',
+                                data: [1200, 1500, 1800, 2000],
+                                borderColor: '#8884d8',
+                                fill: false
+                            },
+                            {
+                                label: 'Actual Sales',
+                                data: [1100, 1400, 1700, 1900],
+                                borderColor: '#82ca9d',
+                                fill: false
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: { title: { display: true, text: 'Month' } },
+                            y: { title: { display: true, text: 'Quantity' } }
+                        }
+                    }
+                });
+            }
+        }
+    ];
+
+    let currentStep = 0;
+
+    const stepContainer = document.getElementById('step-container');
+    const nextButton = document.getElementById('next-button');
+    const restartButton = document.getElementById('restart-button');
+
+    const renderStep = () => {
+        stepContainer.innerHTML = `
+        <h2>${steps[currentStep].title}</h2>
+        ${steps[currentStep].content}
+      `;
+        steps[currentStep].onInit();
+
+        // Toggle Restart Button visibility
+        restartButton.style.display = currentStep > 0 ? 'inline-block' : 'none';
+
+        // Toggle Next Button text and state
+        if (currentStep === steps.length - 1) {
+            nextButton.disabled = true;
+            nextButton.textContent = "All Steps Completed!";
+        } else {
+            nextButton.disabled = false;
+            nextButton.textContent = "Next Step";
+        }
+    };
+
+    const restartPrototype = () => {
+        currentStep = 0;
+        renderStep();
+    };
+
+    const shareLink = (link, platform) => {
+        const encodedLink = encodeURIComponent(link);
+        const shareURLs = {
+            whatsapp: `https://wa.me/?text=${encodedLink}`,
+            sms: `sms:?body=${encodedLink}`,
+            facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedLink}`,
+            twitter: `https://twitter.com/intent/tweet?url=${encodedLink}`
+        };
+
+        if (shareURLs[platform]) {
+            window.open(shareURLs[platform], '_blank');
+        }
+    };
+
+    nextButton.addEventListener('click', () => {
+        if (currentStep < steps.length - 1) {
+            currentStep++;
+            renderStep();
+        }
+    });
+
+    restartButton.addEventListener('click', restartPrototype);
+
+    renderStep();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</body>
+</html>
