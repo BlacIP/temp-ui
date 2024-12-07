@@ -7,11 +7,11 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            background-color: #f5f5f5;
             margin: 0;
         }
         .container {
@@ -23,25 +23,26 @@
             max-width: 400px;
             text-align: center;
         }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
         button {
             background: #007bff;
             color: white;
-            padding: 10px 20px;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
-            margin-top: 10px;
         }
         button:hover {
             background: #0056b3;
         }
         ul {
             text-align: left;
-            list-style: none;
             padding: 0;
-        }
-        li {
-            margin: 5px 0;
+            list-style: none;
         }
     </style>
 </head>
@@ -50,134 +51,105 @@
     <h1 id="main-title">Education SMEs Solutions</h1>
     <div id="step-container"></div>
     <div id="button-container">
-        <button id="next-button">Next Step</button>
+        <button id="next-button" style="display: none;">Next Step</button>
         <button id="restart-button" style="display: none;">Restart</button>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    let performanceChart; // To hold the Chart.js instance
+    let studentDetails = {};
+    const interests = ["Mathematics", "Programming", "Creative Writing", "Physics"];
 
     const steps = [
         {
-            title: "Enrollment & Payment Portals",
+            title: "Student Details Form",
             content: `
-          <p>Streamline student enrollment and payments in one place.</p>
-          <button id="generate-invoice">Generate Payment Invoice</button>
-          <div id="invoice-output" style="margin-top: 10px;"></div>
+          <p>Please enter your details below.</p>
+          <input id="student-name" type="text" placeholder="Name" />
+          <input id="student-department" type="text" placeholder="Department" />
+          <input id="student-level" type="number" placeholder="Level" />
+          <input id="student-semester" type="number" placeholder="Semester" />
+          <button id="submit-details">Submit</button>
         `,
             onInit: () => {
-                document.getElementById('generate-invoice').addEventListener('click', () => {
-                    const invoiceId = `INV-${Math.random().toString(36).substr(2, 9)}`;
-                    const invoiceOutput = document.getElementById('invoice-output');
-                    invoiceOutput.innerHTML = `
-              <p>Invoice Generated: <strong>${invoiceId}</strong></p>
-              <p>Send this to the parent or student for payment.</p>
-            `;
+                document.getElementById("submit-details").addEventListener("click", () => {
+                    studentDetails = {
+                        name: document.getElementById("student-name").value,
+                        department: document.getElementById("student-department").value,
+                        level: document.getElementById("student-level").value,
+                        semester: document.getElementById("student-semester").value,
+                    };
+                    if (Object.values(studentDetails).every((val) => val.trim())) {
+                        renderStep(1);
+                    } else {
+                        alert("Please fill all fields!");
+                    }
                 });
-            }
+            },
         },
         {
-            title: "Personalized Learning Recommendations",
+            title: "Invoice Generation",
             content: `
-          <p>AI suggests courses based on student interests and progress.</p>
-          <ul id="recommendations-list">
-            <li>Mathematics Fundamentals</li>
-            <li>Introduction to Programming</li>
-            <li>Creative Writing Workshop</li>
+          <p>Invoice Generated:</p>
+          <p><strong>Name:</strong> ${studentDetails.name}</p>
+          <p><strong>Department:</strong> ${studentDetails.department}</p>
+          <p><strong>Level:</strong> ${studentDetails.level}</p>
+          <p><strong>Semester:</strong> ${studentDetails.semester}</p>
+          <button id="next-interests">Select Interests</button>
+        `,
+            onInit: () => {
+                document.getElementById("next-interests").addEventListener("click", () => renderStep(2));
+            },
+        },
+        {
+            title: "Interest Selection",
+            content: `
+          <p>Select your interests below:</p>
+          <ul id="interest-list">
+            ${interests
+                .map((interest) => `<li><input type="checkbox" value="${interest}"> ${interest}</li>`)
+                .join("")}
           </ul>
-          <button id="add-recommendation">Add Recommendation</button>
+          <button id="generate-courses">Generate Courses</button>
         `,
             onInit: () => {
-                document.getElementById('add-recommendation').addEventListener('click', () => {
-                    const newCourse = prompt("Enter a new course recommendation:");
-                    if (newCourse) {
-                        const list = document.getElementById('recommendations-list');
-                        const newItem = document.createElement('li');
-                        newItem.textContent = newCourse;
-                        list.appendChild(newItem);
-
-                        // Add the new course to the chart
-                        if (performanceChart) {
-                            performanceChart.data.labels.push(newCourse);
-                            performanceChart.data.datasets[0].data.push(Math.floor(Math.random() * 100)); // Random grade
-                            performanceChart.update(); // Update the chart
-                        }
+                document.getElementById("generate-courses").addEventListener("click", () => {
+                    const selectedInterests = Array.from(
+                        document.querySelectorAll("#interest-list input:checked")
+                    ).map((input) => input.value);
+                    if (selectedInterests.length) {
+                        renderStep(3, selectedInterests);
+                    } else {
+                        alert("Please select at least one interest!");
                     }
                 });
-            }
+            },
         },
         {
-            title: "Real-Time Student Performance Dashboard",
-            content: `
-          <p>Track and analyze student performance.</p>
-          <canvas id="performance-chart" width="400" height="300"></canvas>
+            title: "AI Course Suggestions",
+            content: (selectedInterests) => `
+          <p>Based on your interests, we suggest the following courses:</p>
+          <ul>
+            ${selectedInterests.map((interest) => `<li>${interest} Fundamentals</li>`).join("")}
+          </ul>
         `,
-            onInit: () => {
-                const ctx = document.getElementById('performance-chart').getContext('2d');
-                performanceChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Math', 'Science', 'English', 'History'],
-                        datasets: [
-                            {
-                                label: 'Student Grades',
-                                data: [85, 90, 78, 88],
-                                backgroundColor: ['#4caf50', '#2196f3', '#ff5722', '#ffc107']
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: { title: { display: true, text: 'Grade' }, beginAtZero: true }
-                        }
-                    }
-                });
-            }
-        }
+            onInit: () => {},
+        },
     ];
 
-    let currentStep = 0;
-
-    const stepContainer = document.getElementById('step-container');
-    const nextButton = document.getElementById('next-button');
-    const restartButton = document.getElementById('restart-button');
-
-    const renderStep = () => {
-        stepContainer.innerHTML = `
-        <h2>${steps[currentStep].title}</h2>
-        ${steps[currentStep].content}
+    const renderStep = (stepIndex, dynamicData = null) => {
+        const step = steps[stepIndex];
+        document.getElementById("step-container").innerHTML = `
+        <h2>${step.title}</h2>
+        ${typeof step.content === "function" ? step.content(dynamicData) : step.content}
       `;
-        steps[currentStep].onInit();
-
-        // Show Restart Button on all steps except the first
-        restartButton.style.display = currentStep > 0 ? 'inline-block' : 'none';
-
-        // Show or hide the Next Button
-        if (currentStep === steps.length - 1) {
-            nextButton.style.display = 'none';
-        } else {
-            nextButton.style.display = 'inline-block';
-        }
+        step.onInit();
+        document.getElementById("next-button").style.display = stepIndex < steps.length - 1 ? "inline-block" : "none";
+        document.getElementById("restart-button").style.display = stepIndex > 0 ? "inline-block" : "none";
     };
 
-    const restartPrototype = () => {
-        currentStep = 0;
-        renderStep();
-    };
-
-    nextButton.addEventListener('click', () => {
-        if (currentStep < steps.length - 1) {
-            currentStep++;
-            renderStep();
-        }
-    });
-
-    restartButton.addEventListener('click', restartPrototype);
-
-    renderStep();
+    document.getElementById("restart-button").addEventListener("click", () => renderStep(0));
+    renderStep(0);
 </script>
 </body>
 </html>

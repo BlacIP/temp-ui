@@ -26,39 +26,21 @@
         button {
             background: #007bff;
             color: white;
-            padding: 10px 20px;
+            padding: 10px;
+            margin-top: 10px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 10px;
         }
         button:hover {
             background: #0056b3;
         }
-        input, textarea {
+        select, input {
             width: 100%;
             padding: 10px;
-            margin: 5px 0;
+            margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 10px 0;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        ul {
-            text-align: left;
-            padding: 0;
-            list-style: none;
-        }
-        li {
-            margin: 5px 0;
         }
     </style>
 </head>
@@ -67,167 +49,93 @@
     <h1 id="main-title">Food Processing SMEs Solutions</h1>
     <div id="step-container"></div>
     <div id="button-container">
-        <button id="next-button">Next Step</button>
+        <button id="next-button" style="display: none;">Next Step</button>
         <button id="restart-button" style="display: none;">Restart</button>
     </div>
 </div>
 
 <script>
+    const items = {
+        "Rice Bag": 5000,
+        "Vegetable Oil": 3000,
+        "Flour Sack": 4000,
+        "Canned Tomatoes": 2500,
+    };
+
+    let selectedItem = null;
+    let selectedFrequency = null;
+
     const steps = [
         {
-            title: "Supply Chain Payment Tracker",
+            title: "Subscription Item Selection",
             content: `
-          <p>Track payments through each stage of the supply chain.</p>
-          <table>
-            <thead>
-              <tr>
-                <th>Stage</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="payment-tracker">
-              <tr>
-                <td>Sourcing Raw Materials</td>
-                <td id="stage-1">Pending</td>
-              </tr>
-              <tr>
-                <td>Processing Goods</td>
-                <td id="stage-2">Pending</td>
-              </tr>
-              <tr>
-                <td>Delivering to Clients</td>
-                <td id="stage-3">Pending</td>
-              </tr>
-            </tbody>
-          </table>
-          <button id="update-payments">Update Payment Status</button>
+          <p>Select an item for subscription and see the price below.</p>
+          <select id="item-dropdown">
+            <option value="" disabled selected>Select an item</option>
+            ${Object.keys(items).map(item => `<option value="${item}">${item}</option>`).join("")}
+          </select>
+          <p id="item-price">Price: --</p>
+          <button id="proceed-to-frequency" disabled>Next Step</button>
         `,
             onInit: () => {
-                const stages = [
-                    { id: "stage-1", status: "Completed" },
-                    { id: "stage-2", status: "In Progress" },
-                    { id: "stage-3", status: "Pending" }
-                ];
-                document.getElementById('update-payments').addEventListener('click', () => {
-                    stages.forEach(stage => {
-                        const stageElement = document.getElementById(stage.id);
-                        stageElement.textContent = stage.status;
-                    });
+                const dropdown = document.getElementById("item-dropdown");
+                const priceDisplay = document.getElementById("item-price");
+                const nextButton = document.getElementById("proceed-to-frequency");
+
+                dropdown.addEventListener("change", () => {
+                    selectedItem = dropdown.value;
+                    priceDisplay.textContent = `Price: ₦${items[selectedItem]}`;
+                    nextButton.disabled = false;
                 });
-            }
+
+                nextButton.addEventListener("click", () => renderStep(1));
+            },
         },
         {
-            title: "Recurring Payments for Subscription Orders",
+            title: "Order Frequency Selection",
             content: `
-          <p>Set up recurring payments for subscription-based orders.</p>
-          <label for="client-name">Client Name:</label>
-          <input id="client-name" type="text" placeholder="Enter client name" />
-          <label for="order-frequency">Order Frequency:</label>
-          <select id="order-frequency">
+          <p>Select the order frequency for your subscription.</p>
+          <select id="frequency-dropdown">
             <option value="weekly">Weekly</option>
             <option value="bi-weekly">Bi-Weekly</option>
             <option value="monthly">Monthly</option>
           </select>
-          <button id="create-subscription">Create Subscription</button>
-          <div id="subscription-output" style="margin-top: 10px;"></div>
+          <button id="generate-subscription">Generate Subscription</button>
+          <div id="subscription-summary" style="margin-top: 10px;"></div>
         `,
             onInit: () => {
-                document.getElementById('create-subscription').addEventListener('click', () => {
-                    const clientName = document.getElementById('client-name').value.trim();
-                    const frequency = document.getElementById('order-frequency').value;
-                    const output = document.getElementById('subscription-output');
-                    if (clientName) {
-                        output.innerHTML = `
-                <p>Subscription created for <strong>${clientName}</strong>.</p>
-                <p>Order Frequency: <strong>${frequency}</strong>.</p>
-              `;
-                    } else {
-                        alert("Please enter a client name!");
-                    }
+                const frequencyDropdown = document.getElementById("frequency-dropdown");
+                const generateButton = document.getElementById("generate-subscription");
+                const summaryDisplay = document.getElementById("subscription-summary");
+
+                generateButton.addEventListener("click", () => {
+                    selectedFrequency = frequencyDropdown.value;
+                    summaryDisplay.innerHTML = `
+              <p><strong>Subscription Details:</strong></p>
+              <p>Item: ${selectedItem}</p>
+              <p>Price: ₦${items[selectedItem]}</p>
+              <p>Frequency: ${selectedFrequency.charAt(0).toUpperCase() + selectedFrequency.slice(1)}</p>
+            `;
                 });
-            }
+            },
         },
-        {
-            title: "Sales Forecasting & Demand Analysis",
-            content: `
-          <p>AI-powered demand forecasting helps you plan production cycles.</p>
-          <canvas id="forecast-chart" width="400" height="300"></canvas>
-        `,
-            onInit: () => {
-                const ctx = document.getElementById('forecast-chart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                        datasets: [
-                            {
-                                label: 'Predicted Demand',
-                                data: [120, 150, 170, 200],
-                                borderColor: '#007bff',
-                                fill: false
-                            },
-                            {
-                                label: 'Actual Sales',
-                                data: [100, 140, 160, 190],
-                                borderColor: '#ff5722',
-                                fill: false
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            x: { title: { display: true, text: 'Weeks' } },
-                            y: { title: { display: true, text: 'Units Sold' } }
-                        }
-                    }
-                });
-            }
-        }
     ];
 
-    let currentStep = 0;
-
-    const stepContainer = document.getElementById('step-container');
-    const nextButton = document.getElementById('next-button');
-    const restartButton = document.getElementById('restart-button');
-
-    const renderStep = () => {
-        stepContainer.innerHTML = `
-        <h2>${steps[currentStep].title}</h2>
-        ${steps[currentStep].content}
+    const renderStep = (stepIndex) => {
+        const step = steps[stepIndex];
+        document.getElementById("step-container").innerHTML = `
+        <h2>${step.title}</h2>
+        ${step.content}
       `;
-        steps[currentStep].onInit();
+        step.onInit();
 
-        // Toggle Restart Button visibility
-        restartButton.style.display = currentStep > 0 ? 'inline-block' : 'none';
-
-        // Toggle Next Button text and state
-        if (currentStep === steps.length - 1) {
-            nextButton.disabled = true;
-            nextButton.textContent = "All Steps Completed!";
-        } else {
-            nextButton.disabled = false;
-            nextButton.textContent = "Next Step";
-        }
+        // Show/hide navigation buttons
+        document.getElementById("next-button").style.display = stepIndex < steps.length - 1 ? "inline-block" : "none";
+        document.getElementById("restart-button").style.display = stepIndex > 0 ? "inline-block" : "none";
     };
 
-    const restartPrototype = () => {
-        currentStep = 0;
-        renderStep();
-    };
-
-    nextButton.addEventListener('click', () => {
-        if (currentStep < steps.length - 1) {
-            currentStep++;
-            renderStep();
-        }
-    });
-
-    restartButton.addEventListener('click', restartPrototype);
-
-    renderStep();
+    document.getElementById("restart-button").addEventListener("click", () => renderStep(0));
+    renderStep(0);
 </script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>
