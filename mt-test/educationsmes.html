@@ -51,13 +51,12 @@
     <h1 id="main-title">Education SMEs Solutions</h1>
     <div id="step-container"></div>
     <div id="button-container">
-        <button id="next-button" style="display: none;">Next Step</button>
         <button id="restart-button" style="display: none;">Restart</button>
     </div>
 </div>
 
 <script>
-    let studentDetails = {};
+    let studentDetails = {}; // Object to hold student details
     const interests = ["Mathematics", "Programming", "Creative Writing", "Physics"];
 
     const steps = [
@@ -73,23 +72,22 @@
         `,
             onInit: () => {
                 document.getElementById("submit-details").addEventListener("click", () => {
-                    studentDetails = {
-                        name: document.getElementById("student-name").value,
-                        department: document.getElementById("student-department").value,
-                        level: document.getElementById("student-level").value,
-                        semester: document.getElementById("student-semester").value,
-                    };
-                    if (Object.values(studentDetails).every((val) => val.trim())) {
-                        renderStep(1);
+                    studentDetails.name = document.getElementById("student-name").value.trim();
+                    studentDetails.department = document.getElementById("student-department").value.trim();
+                    studentDetails.level = document.getElementById("student-level").value.trim();
+                    studentDetails.semester = document.getElementById("student-semester").value.trim();
+
+                    if (Object.values(studentDetails).every((value) => value)) {
+                        renderStep(1); // Move to the next step
                     } else {
-                        alert("Please fill all fields!");
+                        alert("Please fill in all fields!");
                     }
                 });
             },
         },
         {
             title: "Invoice Generation",
-            content: `
+            content: () => `
           <p>Invoice Generated:</p>
           <p><strong>Name:</strong> ${studentDetails.name}</p>
           <p><strong>Department:</strong> ${studentDetails.department}</p>
@@ -144,12 +142,17 @@
         ${typeof step.content === "function" ? step.content(dynamicData) : step.content}
       `;
         step.onInit();
-        document.getElementById("next-button").style.display = stepIndex < steps.length - 1 ? "inline-block" : "none";
+
+        // Toggle Restart Button visibility
         document.getElementById("restart-button").style.display = stepIndex > 0 ? "inline-block" : "none";
     };
 
-    document.getElementById("restart-button").addEventListener("click", () => renderStep(0));
-    renderStep(0);
+    document.getElementById("restart-button").addEventListener("click", () => {
+        studentDetails = {}; // Reset student details
+        renderStep(0);
+    });
+
+    renderStep(0); // Initialize the first step
 </script>
 </body>
 </html>
